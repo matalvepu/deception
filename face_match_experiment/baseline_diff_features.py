@@ -18,38 +18,38 @@ def compute_feature_change(f_name,i_e,w_s,lag,window):
 	if right_e > w_s+window:
 		right_e=w_s+window
 
-	s_l=[0]*19
+	s_l=[0]*17
 	c_l=0
-	s_r=[0]*19
+	s_r=[0]*17
 	c_r=0
 
 	with open(f_name) as f:
 		header = f.readline()
 		for line in f:
 			line=line[:-1].split(',')
-			a=line[395:]
-			a.insert(0,line[2])
+			a=line[396:]
+			a.pop(-2) #remove au28_c because file does not have au28_r
 			a=[float(x) for x in a]
 			time=float(line[1])	
 			if time>=left and time<i_e:
 				c_l+=1
 				for i in range(len(s_l)):
 					if i>0:
-						s_l[i]+=(a[i]*a[i+18])/float(5)
+						s_l[i]+=(a[i]*a[i+17])/float(5)
 					else:
 						s_l[i]+=a[i]
 			if time>=right_s and time<=right_e:
 				c_r+=1
 				for i in range(len(s_r)):
 					if i>0:
-						s_r[i]+=(a[i]*a[i+18])/float(5)
+						s_r[i]+=(a[i]*a[i+17])/float(5)
 					else:
 						s_r[i]+=a[i]
 
 	s_l=[float(x/c_l) for x in s_l]
 	s_r=[float(x/c_r) for x in s_r]
 
-	diff=[0.]*19
+	diff=[0.]*17
 	for i in range(len(s_l)):
 		diff[i]=s_r[i]-s_l[i]
 
@@ -76,7 +76,7 @@ def get_time_interval(root,time_intervals):
 	return []
 
 def write_csv(root,feature,lag,window):
-	file_name="out/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
+	file_name="out_baseline_diff/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
 	with open(file_name, 'a') as out_f:
 		wr = csv.writer(out_f)
 		feature.insert(0,root)
@@ -105,46 +105,23 @@ with open(f_name) as f:
 
 s1_map={}
 
-with open("list_new50.csv") as f:
+with open("list_s1_s2.csv") as f:
 	header=f.readline()
 	for line in f:
 		line=line.split(',')
 		f_name=line[0]
 		s1_map[f_name[:-4]]=float(line[1])
 
-with open("list_classic61.csv") as f:
-	header=f.readline()
-	for line in f:
-		line=line.split(',')
-		f_name=line[0]
-		s1_map[f_name[:-4]]=float(line[1])
-
-with open("list_new_april.csv") as f:
-	header=f.readline()
-	for line in f:
-		line=line.split(',')
-		f_name=line[0]
-		s1_map[f_name]=float(line[1])
-
-with open("list_april2.csv") as f:
-	header=f.readline()
-	for line in f:
-		line=line.split(',')
-		f_name=line[0]
-		s1_map[f_name]=float(line[1])
-# print(get_time_interval("2017-01-26_14-26-15-622",time_intervals))
-new50_files = glob.glob("/localdisk/new50/OpenFace/*-W-*.txt")
-classic61_files=glob.glob("/localdisk/classic61/OpenFace/*-W-*.txt")
-new_april=glob.glob("/localdisk/new_april/OpenFace/*-W-*.txt")
-april_2=glob.glob("/localdisk/april2/OpenFace/*-W-*.txt")
+new50_files = glob.glob("/localdisk/deception/new50/OpenFace/*-W-*.txt")
+classic61_files=glob.glob("/localdisk/deception/classic61/OpenFace/*-W-*.txt")
+new_april=glob.glob("/localdisk/deception/new_april/OpenFace/*-W-*.txt")
+april_2=glob.glob("/localdisk/deception/april2/OpenFace/*-W-*.txt")
 open_face_files=new50_files+classic61_files+new_april+april_2
-# open_face_files=april_2
 
 lag=float(sys.argv[1])
 window=float(sys.argv[2])
 
-
-for file in open_face_files:	
+for file in open_face_files:
 	file_name=file[file.rfind('/')+1:]
 	root=file_name[:file_name.rfind('-')-4]
 	if root in s1_map and root in root_names and root in root_names_s:		
