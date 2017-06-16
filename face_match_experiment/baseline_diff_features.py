@@ -109,8 +109,8 @@ with open("list_s1_s2.csv") as f:
 	header=f.readline()
 	for line in f:
 		line=line.split(',')
-		f_name=line[0]
-		s1_map[f_name[:-4]]=float(line[1])
+		root=line[0]
+		s1_map[root]=float(line[1])
 
 new50_files = glob.glob("/localdisk/deception/new50/OpenFace/*-W-*.txt")
 classic61_files=glob.glob("/localdisk/deception/classic61/OpenFace/*-W-*.txt")
@@ -133,6 +133,7 @@ for file in open_face_files:
 		if intervals:
 			feature=get_feature_diff(file,intervals,lag,window)
 			write_csv(root,feature,lag,window)
+
 
 
 
