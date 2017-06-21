@@ -34,15 +34,17 @@ def compute_feature_change(f_name,i_e,w_s,lag,window):
 			if time>=left and time<i_e:
 				c_l+=1
 				for i in range(len(s_l)):
-					# s_l[i]+=a[i+17]
-					#s_l[i]+=(a[i]*a[i+17])/float(5)
-					s_l[i]+=a[i] #only au_r
+					if i>0:
+						s_l[i]+=(a[i]*a[i+17])/float(5)
+					else:
+						s_l[i]+=a[i]
 			if time>=right_s and time<=right_e:
 				c_r+=1
 				for i in range(len(s_r)):
-					#s_r[i]+=a[i+17]
-					#s_r[i]+=(a[i]*a[i+17])/float(5)
-					s_r[i]+=a[i] 	#only au_r
+					if i>0:
+						s_r[i]+=(a[i]*a[i+17])/float(5)
+					else:
+						s_r[i]+=a[i]
 
 	s_l=[float(x/c_l) for x in s_l]
 	s_r=[float(x/c_r) for x in s_r]
@@ -74,7 +76,7 @@ def get_time_interval(root,time_intervals):
 	return []
 
 def write_csv(root,feature,lag,window):
-	file_name="out_baseline_diff/au_r/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
+	file_name="out_baseline_diff/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
 	with open(file_name, 'a') as out_f:
 		wr = csv.writer(out_f)
 		feature.insert(0,root)
