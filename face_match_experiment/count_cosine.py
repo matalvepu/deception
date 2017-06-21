@@ -29,7 +29,7 @@ def get_truth_label(root_name,truth_labels):
 
 def write_csv(root_name,truth_label,count,lag,window):
 	l=[]
-	file_name="data/cosine_similarity/count_diff_l_"+str(lag)+"_w_"+str(window)+".csv"
+	file_name="data/cosine_similarity/au_r/count_diff_l_"+str(lag)+"_w_"+str(window)+".csv"
 	with open(file_name, 'a') as out_f:
 		wr = csv.writer(out_f)
 		l.append(root_name)
@@ -46,7 +46,7 @@ def min_cosine_distance_index(feature,b_feature):
 lag=float(sys.argv[1])
 window=float(sys.argv[2])
 
-file_name="out_baseline_diff/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
+file_name="out_baseline_diff/au_r/baseline_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
 f = open(file_name)
 csv_f = csv.reader(f)
 baseline_features=[]
@@ -61,7 +61,7 @@ for line in csv_f:
 		feature.append(q)
 	baseline_features.append(feature)
 
-file_name="out_relevant_diff/relevant_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
+file_name="out_relevant_diff/au_r/relevant_diff_features_l_"+str(lag)+"_w_"+str(window)+".csv"
 f = open(file_name)
 csv_f = csv.reader(f)
 relevant_features=[]
